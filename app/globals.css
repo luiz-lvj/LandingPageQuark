@@ -2,14 +2,25 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  font-family: Arial, Helvetica, sans-serif;
+
+html {
+  scroll-behavior: smooth;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  @apply bg-background text-foreground;
+}
+
+@layer components {
+  a:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
   }
+}
+
+section {
+  @apply mb-8;
 }
 
 @layer base {
@@ -75,4 +86,34 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Custom Scrollbar Styles */
+::-webkit-scrollbar {
+  width: 8px;
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(100, 100, 100, 0.5);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(100, 100, 100, 0.7);
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+/* Firefox Scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(100, 100, 100, 0.5) transparent;
+}
+
+/* Scrollbar Hover Effect for Firefox */
+*:hover {
+  scrollbar-color: rgba(100, 100, 100, 0.7) transparent;
 }

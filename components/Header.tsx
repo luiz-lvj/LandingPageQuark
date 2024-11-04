@@ -1,84 +1,74 @@
-'use client';
+'use client'
 
-import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
-import { usePathname } from 'next/navigation';
-import { Menu } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { ThemeColorToggle } from '@/components/themeToggle/ThemeColorToggle';
-import { ThemeModeToggle } from '@/components/themeToggle/ThemeModeToggle';
-import { navItems } from '@/lib/navItems';
+import * as React from 'react'
+import { motion, useScroll, useMotionValueEvent, animate } from 'framer-motion';
+import { cn } from '@/lib/utils'
 
-type HeaderProps = {
-  logo?: string;
-  actions?: React.ReactNode;
-};
+const navItems = [
+  { name: 'Home', href: '#home' },
+  { name: 'About', href: '#about' },
+  { name: 'Team', href: '#team' },
+  { name: 'Try Now', href: '#try-now' },
+  { name: 'Contact', href: '#contact' },
+]
 
-export const Header = React.memo(function Header({ logo, actions }: HeaderProps) {
-  const [isOpen, setIsOpen] = useState(false);
-  const pathname = usePathname();
+export function Header() {
+  const { scrollY } = useScroll()
+  const [hidden, setHidden] = React.useState(false)
 
-  useEffect(() => {
-    setIsOpen(false);
-  }, [pathname]);
+  const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
+    const target = document.querySelector(href);
+    if (target) {
+      const headerOffset = 80; // Adjust based on your header height
+      const elementPosition = target.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 
-  const toggleMenu = () => setIsOpen((prev) => !prev);
+      animate(window.scrollY, offsetPosition, {
+        duration: 0.8,
+        onUpdate: (value) => window.scrollTo(0, value),
+        ease: 'easeInOut',
+      });
+    }
+  };
+
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    const previous = scrollY.getPrevious() ?? 0
+    if (latest > previous && latest > 150) {
+      setHidden(true)
+    } else {
+      setHidden(false)
+    }
+  })
 
   return (
-    <header className="sticky top-0 z-40 px-4 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-14 items-center">
-        <Link href="/" className="mr-6 flex items-center space-x-2">
-          {logo && <Image src={logo} alt="Logo" width={32} height={32} />}
-          <span className="hidden font-bold sm:inline-block">MyApp</span>
-        </Link>
-        <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
-          <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
+    <motion.header
+      variants={{
+        visible: { y: 0 },
+        hidden: { y: "-100%" },
+      }}
+      animate={hidden ? "hidden" : "visible"}
+      transition={{ duration: 0.35, ease: "easeInOut" }}
+      className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-sm"
+    >
+      <nav className="container mx-auto px-4 py-4">
+        <ul className="flex justify-center space-x-8">
+          {navItems.map((item) => (
+            <li key={item.name}>
+              <a
                 href={item.href}
                 className={cn(
-                  'transition-colors hover:text-foreground/80',
-                  pathname === item.href ? 'text-primary font-semibold' : 'text-foreground/60'
+                  "text-sm font-medium transition-colors hover:text-primary",
+                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
                 )}
+                onClick={(e) => scrollToSection(e, item.href)}
               >
-                {item.label}
-              </Link>
-            ))}
-          </nav>
-          <div className="flex items-center space-x-2">
-            {actions}
-            <ThemeColorToggle />
-            <ThemeModeToggle />
-          </div>
-          <Button variant="ghost" className="md:hidden" size="sm" onClick={toggleMenu}>
-            <Menu className="h-5 w-5" />
-            <span className="sr-only">Toggle menu</span>
-          </Button>
-        </div>
-      </div>
-      {isOpen && (
-        <div className="container md:hidden">
-          <nav className="flex flex-col space-y-3 py-4">
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={cn(
-                  'flex items-center space-x-2 transition-colors hover:text-foreground/80',
-                  pathname === item.href ? 'text-primary font-semibold' : 'text-foreground/60'
-                )}
-                onClick={() => setIsOpen(false)}
-              >
-                {item.icon}
-                <span>{item.label}</span>
-              </Link>
-            ))}
-          </nav>
-        </div>
-      )}
-    </header>
-  );
-});
+                {item.name}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </motion.header>
+  )
+}

@@ -4,7 +4,6 @@ import "./globals.css";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import ThemeProvider from "@/components/context/themeProvider";
 import { Header } from "@/components/Header";
-import { SideBar } from "@/components/SideBar";
 import BackgroundWrapper from "@/components/context/backgroundWrapper";
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
@@ -61,8 +60,7 @@ export default function RootLayout({
             <BackgroundWrapper>
               <ToastContainer />
               <main className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-                {/* <Header /> */}
-                <SideBar />
+                <Header />
                 {children}
               </main>
             </BackgroundWrapper>
