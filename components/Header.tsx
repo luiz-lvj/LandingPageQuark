@@ -8,9 +8,9 @@ import Image from 'next/image'
 import quarkLogo from '@/public/logo/quark_full_logo.png'
 const navItems = [
   { name: 'About', href: '#about' },
-  { name: 'Team', href: '#team' },
   { name: 'Try Now', href: '#try-now' },
-  { name: 'Contact', href: '#contact' },
+  { name: 'Team', href: '#team' },
+  { name: 'Waitlist', href: '#contact' },
 ]
 
 export function Header() {
