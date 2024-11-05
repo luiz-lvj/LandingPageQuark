@@ -15,10 +15,9 @@ export default function Home() {
       transition={{ duration: 0.5 }}
       className="flex flex-col items-center justify-between overflow-hidden"
     >
-      <Hero />
       <About />
-      <Team />
       <TryNow />
+      <Team />
       <Footer />
     </motion.main>
   )

@@ -24,11 +24,11 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Your App Name",
-  description: "A more detailed description of your app for SEO purposes",
+  title: "Quark",
+  description: "Quark offers omnichain vaults for efortless multichain investments, concentrated liquidity and safe yielding.",
   openGraph: {
-    title: "Your App Name",
-    description: "A brief description for social media sharing",
+    title: "Quark",
+    description: "Bonding networks with Omnichain Baskets",
     images: [{ url: "/og-image.jpg" }],
   },
 };

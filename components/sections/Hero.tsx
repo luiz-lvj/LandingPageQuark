@@ -56,9 +56,9 @@ const itemVariants = {
 
 export default function Hero() {
   const oneLiners = [
-    'universal liquidity',
-    'cross-chain DeFi',
-    'seamless asset management',
+    'efortless multichain investments',
+    'concentrated liquidity',
+    'safe cross-chain yielding',
   ]
 
   const scrollToNextSection = () => {
@@ -90,11 +90,12 @@ export default function Hero() {
           />
         </motion.div>
         <motion.h2 variants={itemVariants} className="text-3xl mb-6">
-          The atomic engine for <TypingAnimation words={oneLiners} />
+          Bonding networks for <span className='text-blue-500'><TypingAnimation words={oneLiners} /></span>
         </motion.h2>
       </motion.div>
-      {/* Add a subtle scroll indicator */}
-      <motion.div
+      {/* Add a subtle scroll indicator */} 
+      {/* Didn't really liked this scroll indicator, let's change it later*/}
+      {/* <motion.div
         className="absolute bottom-6"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -107,7 +108,7 @@ export default function Hero() {
             transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
           />
         </div>
-      </motion.div>
+      </motion.div> */}
     </section>
   );
 }
