@@ -6,7 +6,6 @@ import About from '@/components/sections/About'
 import Team from '@/components/sections/Team'
 import TryNow from '@/components/sections/TryNow'
 import Newsletter from '@/components/sections/Newsletter'
-import Footer from '@/components/Footer'
 
 export default function Home() {
   return (
@@ -21,7 +20,6 @@ export default function Home() {
       <TryNow />
       <Team />
       <Newsletter />
-      {/* <Footer /> */}
     </motion.main>
   )
 }
