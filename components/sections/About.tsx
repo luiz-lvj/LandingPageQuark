@@ -1,96 +1,127 @@
 'use client'
 
-import { animate, motion, useMotionValueEvent, useScroll } from 'framer-motion'
-import Hero from './Hero';
-import * as React from 'react'
+import React from 'react'
+import { motion } from 'framer-motion'
+import { useInView } from 'react-intersection-observer'
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.3 // Increased staggering
-    }
-  }
+interface FeatureCardProps {
+  title: string
+  description: string
+  icon: React.ReactNode
+  index: number
 }
 
-const itemVariants = {
-  hidden: { y: 40, opacity: 0 }, // Increased y offset
-  visible: {
-    y: 0,
-    opacity: 1,
-    transition: {
-      duration: 0.8, // Increased duration
-      ease: 'easeInOut' // Added easing
-    }
-  }
-}
+const features = [
+  {
+    title: "Omnichain Vaults",
+    description: "Deposit assets into managed vaults secured by policy-driven smart contracts.",
+    icon: "🏛️",
+  },
+  {
+    title: "Cross-Chain DeFi",
+    description: "Access multiple chains and protocols through a single interface.",
+    icon: "🌐",
+  },
+  {
+    title: "Concentrated Liquidity",
+    description: "Optimize your yields with automated liquidity management.",
+    icon: "💧",
+  },
+  {
+    title: "Safe Yielding",
+    description: "Earn yields across chains with built-in security measures.",
+    icon: "🛡️",
+  },
+]
 
-export default function AboutSection() {
-  const { scrollY } = useScroll()
-  const [hidden, setHidden] = React.useState(false)
-
-  const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    e.preventDefault();
-    const target = document.querySelector(href);
-    if (target) {
-      const headerOffset = 80; // Adjust based on your header height
-      const elementPosition = target.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-
-      animate(window.scrollY, offsetPosition, {
-        duration: 0.8,
-        onUpdate: (value) => window.scrollTo(0, value),
-        ease: 'easeInOut',
-      });
-    }
-  };
-
-  useMotionValueEvent(scrollY, "change", (latest) => {
-    const previous = scrollY.getPrevious() ?? 0
-    if (latest > previous && latest > 150) {
-      setHidden(true)
-    } else {
-      setHidden(false)
-    }
+const FeatureCard: React.FC<FeatureCardProps> = ({ title, description, icon, index }) => {
+  const [ref, inView] = useInView({
+    triggerOnce: true,
+    threshold: 0.1,
   })
-  
+
+  const variants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: { opacity: 1, y: 0 },
+  }
+
   return (
-    <motion.section
-      id="about"
-      variants={containerVariants}
+    <motion.div
+      ref={ref}
       initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, amount: 0.3 }}
-      className="min-h-[80vh] py-16 flex items-center justify-center"
+      animate={inView ? "visible" : "hidden"}
+      variants={variants}
+      transition={{ duration: 0.5, delay: index * 0.2 }}
+      className="bg-card/40 backdrop-blur-sm p-6 rounded-xl border border-border hover:border-primary transition-colors duration-300 ease-in-out"
     >
-      <div className="container mx-auto px-4 max-w-6xl flex flex-col lg:flex-row items-center lg: gap-8 lg:justify-between">
-        <div className="max-w-lg w-[600px] text-center lg:text-left">
-          <motion.h2 
-            variants={itemVariants} 
-            className="text-4xl font-bold mb-4"
-          >
-            Invest in <span className="text-blue-500">all chains</span> using only <span className="text-blue-500">one hub</span>.
-          </motion.h2>
-          <motion.p 
-            variants={itemVariants} 
-            className="text-gray-200 text-lg mb-8"
-          >
-            Quark offers omnichain vaults for effortless multichain investments, concentrated liquidity, and safe yielding. No more boring bridges nor fragmented investments.
-          </motion.p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-            <a href='#try-now' onClick={(e) => scrollToSection(e, "#try-now")} className="bg-blue-500 text-white font-semibold px-6 py-3 rounded-lg hover:bg-blue-600 transition duration-200">
-              Get started
-            </a>
-            <a href='#contact' onClick={(e) => scrollToSection(e, "#contact")} className="bg-gray-200 text-gray-700 font-semibold px-6 py-3 rounded-lg hover:bg-gray-300 transition duration-200">
-              Join waitlist
-            </a>
-          </div>
-        </div>
-        <div className="w-[600px]">
-          <Hero />
-        </div>
+      <div className="flex items-center mb-4">
+        <span className="text-4xl mr-4">{icon}</span>
+        <h3 className="text-xl font-bold text-primary">
+          {title}
+        </h3>
       </div>
-    </motion.section>
-  );
+      <p className="text-muted-foreground">{description}</p>
+    </motion.div>
+  )
+}
+
+export default function About() {
+  const [ref, inView] = useInView({
+    triggerOnce: true,
+    threshold: 0.1,
+  })
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2,
+      },
+    },
+  }
+
+  return (
+    <section id="about" className="py-20 overflow-hidden">
+      <div className="container mx-auto px-4 max-w-[80%]">
+        <motion.div
+          ref={ref}
+          initial="hidden"
+          animate={inView ? "visible" : "hidden"}
+          variants={containerVariants}
+          className="space-y-12"
+        >
+          <motion.div
+            variants={{
+              hidden: { opacity: 0, y: -20 },
+              visible: { opacity: 1, y: 0 },
+            }}
+            className="text-center"
+          >
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              Revolutionizing Cross-Chain DeFi
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Quark offers a suite of powerful features designed to optimize your DeFi experience across multiple chains.
+            </p>
+          </motion.div>
+
+          <motion.div 
+            className="grid sm:grid-cols-2 gap-6"
+            variants={containerVariants}
+          >
+            {features.map((feature, index) => (
+              <FeatureCard
+                key={feature.title}
+                title={feature.title}
+                description={feature.description}
+                icon={feature.icon}
+                index={index}
+              />
+            ))}
+          </motion.div>
+        </motion.div>
+      </div>
+    </section>
+  )
 }

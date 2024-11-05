@@ -1,114 +1,116 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { motion, useScroll, useTransform } from 'framer-motion'
+import { useRef } from 'react'
 import Image from 'next/image'
-import { motion } from 'framer-motion'
-import Meteors from '@/components/ui/meteors'
-import { ChevronDown } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 
-const TypingAnimation = ({ words }: { words: string[] }) => {
-  const [currentWord, setCurrentWord] = useState('')
-  const [currentIndex, setCurrentIndex] = useState(0)
-  const [isDeleting, setIsDeleting] = useState(false)
-
-  useEffect(() => {
-    const animateText = () => {
-      const word = words[currentIndex % words.length]
-      const shouldDelete = isDeleting ? 1 : -1
-      setCurrentWord((prev) => word.substring(0, prev.length - shouldDelete))
-
-      if (!isDeleting && currentWord === word) {
-        setTimeout(() => setIsDeleting(true), 1500)
-      } else if (isDeleting && currentWord === '') {
-        setIsDeleting(false)
-        setCurrentIndex((prev) => prev + 1)
-      }
-    }
-
-    const timer = setTimeout(animateText, isDeleting ? 50 : 150)
-    return () => clearTimeout(timer)
-  }, [currentWord, currentIndex, isDeleting, words])
-
-  return <span className="text-primary">{currentWord}</span>
+const AnimatedBackground = () => {
+  return (
+    <div className="absolute inset-0 -z-10 overflow-hidden">
+      <motion.div
+        className="absolute inset-0 bg-gradient-to-r from-primary/20 via-secondary/20 to-accent/20 opacity-30"
+        animate={{
+          scale: [1, 1.2, 1],
+          rotate: [0, 90, 0],
+        }}
+        transition={{
+          duration: 20,
+          repeat: Infinity,
+          ease: "linear"
+        }}
+      />
+      <div className="absolute inset-0 bg-grid-white/[0.02]" />
+      <div className="absolute h-full w-full bg-background [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]" />
+    </div>
+  )
 }
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.2,
-    },
-  },
-};
-
-const itemVariants = {
-  hidden: { y: 20, opacity: 0 },
-  visible: {
-    y: 0,
-    opacity: 1,
-    transition: {
-      duration: 0.6,
-      ease: 'easeOut',
-    },
-  },
-};
-
 export default function Hero() {
-  const oneLiners = [
-    'efortless multichain investments',
-    'concentrated liquidity',
-    'safe cross-chain yielding',
-  ]
+  const containerRef = useRef<HTMLDivElement>(null)
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end start"]
+  })
 
-  const scrollToNextSection = () => {
-    const aboutSection = document.querySelector('#about')
-    if (aboutSection) {
-      aboutSection.scrollIntoView({ behavior: 'smooth' })
-    }
-  }
+  const y = useTransform(scrollYProgress, [0, 1], [0, -100])
 
   return (
     <section
-      id="home"
-      className="relative flex min-h-[80vh] w-full flex-col items-center justify-center overflow-hidden bg-background/50 text-foreground"
+      ref={containerRef}
+      id="hero"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden mt-10"
     >
-      <Meteors number={10} />
-      <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-        className="z-10 text-center max-w-4xl mx-auto px-4"
-      >
-        <motion.div variants={itemVariants} className="flex items-center justify-center mb-4">
-          <Image
-            src="/logo/quark_full_logo_svg.svg"
-            alt="Quark Logo"
-            width={450}
-            height={450}
-            className="dark:invert dark:drop-shadow-[0_0_0.3rem_#ffffff70]"
-          />
-        </motion.div>
-        <motion.h2 variants={itemVariants} className="text-3xl mb-6">
-          Bonding networks for <span className='text-blue-500'><TypingAnimation words={oneLiners} /></span>
-        </motion.h2>
-      </motion.div>
-      {/* Add a subtle scroll indicator */} 
-      {/* Didn't really liked this scroll indicator, let's change it later*/}
-      {/* <motion.div
-        className="absolute bottom-6"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 2 }}
-      >
-        <div className="w-4 h-8 border-2 border-primary rounded-full flex justify-center items-start">
+      <AnimatedBackground />
+
+      <div className="container mx-auto px-4 max-w-[80%]">
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
           <motion.div
-            className="w-2 h-2 bg-primary rounded-full mb-1"
-            animate={{ y: [0, 8] }}
-            transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-          />
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8 }}
+            className="space-y-8 text-center lg:text-left"
+          >
+            <div>
+              <motion.h1
+                className="text-4xl md:text-6xl font-bold mb-6 leading-tight"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+              >
+                Invest in <span className="text-primary">all chains</span> using only{' '}
+                <span className="text-primary">one hub</span>.
+              </motion.h1>
+              <motion.p
+                className="text-xl text-muted-foreground"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+              >
+                Quark offers omnichain vaults for effortless multichain investments,
+                concentrated liquidity, and safe yielding.
+              </motion.p>
+            </div>
+
+            <motion.div
+              className="flex flex-wrap gap-4 justify-center lg:justify-start"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+            >
+              <Button
+                size="lg"
+                className="bg-primary text-primary-foreground hover:bg-primary/90 px-8"
+              >
+                Get Started
+              </Button>
+              <Button
+                size="lg"
+                variant="outline"
+                className="border-primary text-primary hover:bg-primary/10"
+              >
+                Learn More
+              </Button>
+            </motion.div>
+          </motion.div>
+
+          <motion.div
+            style={{ y }}
+            className="relative hidden lg:flex items-center justify-center"
+          >
+            <div className="relative w-full max-w-[500px] aspect-square mt-10">
+              <div className="absolute inset-0 bg-gradient-to-r from-primary to-secondary rounded-full blur-3xl opacity-20 animate-pulse" />
+              <Image
+                src="/logo/quark_logo_svg.svg"
+                alt="Quark Platform Interface"
+                layout="fill"
+                objectFit="contain"
+                className="relative z-10 dark:invert dark:drop-shadow-[0_0_0.3rem_#ffffff70]"
+              />
+            </div>
+          </motion.div>
         </div>
-      </motion.div> */}
+      </div>
     </section>
-  );
+  )
 }

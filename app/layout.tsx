@@ -6,6 +6,7 @@ import ThemeProvider from "@/components/context/themeProvider";
 import { Header } from "@/components/Header";
 import BackgroundWrapper from "@/components/context/backgroundWrapper";
 import { ToastContainer } from "react-toastify";
+import Footer from "@/components/Footer";
 import 'react-toastify/dist/ReactToastify.css';
 // import 'react-toastify/dist/ReactToastify.min.css'; // minified version
 
@@ -62,6 +63,7 @@ export default function RootLayout({
               <main className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
                 <Header />
                 {children}
+                <Footer />
               </main>
             </BackgroundWrapper>
           </ThemeProvider>

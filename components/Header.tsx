@@ -5,7 +5,7 @@ import { motion, useScroll, useMotionValueEvent, animate } from 'framer-motion'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import Image from 'next/image'
-import quarkLogo from '@/public/logo/quark_full_logo.png'
+
 const navItems = [
   { name: 'About', href: '#about' },
   { name: 'Try Now', href: '#try-now' },
@@ -22,7 +22,7 @@ export function Header() {
     e.preventDefault()
     const target = document.querySelector(href)
     if (target) {
-      const headerOffset = 80 // Adjust based on your header height
+      const headerOffset = 80
       const elementPosition = target.getBoundingClientRect().top
       const offsetPosition = elementPosition + window.pageYOffset - headerOffset
 
@@ -32,6 +32,14 @@ export function Header() {
         ease: 'easeInOut',
       })
     }
+  }
+
+  const scrollToTop = () => {
+    animate(window.scrollY, 0, {
+      duration: 0.8,
+      onUpdate: (value) => window.scrollTo(0, value),
+      ease: 'easeInOut',
+    })
   }
 
   useMotionValueEvent(scrollY, 'change', (latest) => {
@@ -53,17 +61,18 @@ export function Header() {
       transition={{ duration: 0.35, ease: 'easeInOut' }}
       className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-sm"
     >
-      <nav className="container mx-auto px-4 py-4 flex justify-between items-center">
+      <nav className="container mx-auto px-4 py-4 flex justify-between items-center max-w-[80%]">
         <div className="flex items-center space-x-2">
-        <Image
+          <Image
             src="/logo/quark_full_logo_svg.svg"
             alt="Quark Logo"
             width={150}
             height={150}
-            className="dark:invert dark:drop-shadow-[0_0_0.3rem_#ffffff70]"
+            className="dark:invert dark:drop-shadow-[0_0_0.3rem_#ffffff70] cursor-pointer"
+            onClick={scrollToTop}
           />
         </div>
-        <ul className="flex space-x-4">
+        <ul className="hidden md:flex space-x-4">
           {navItems.map((item) => (
             <li key={item.name} className="relative">
               <a
@@ -84,7 +93,7 @@ export function Header() {
               {activeItem === item.name && (
                 <motion.div
                   layoutId="activeItemOutline"
-                  className="p-2 absolute inset-0 border border-blue-500 rounded-full pointer-events-none"
+                  className="p-2 absolute inset-0 border border-primary rounded-full pointer-events-none"
                   initial={false}
                   animate={{ opacity: 1 }}
                   transition={{ type: 'spring', stiffness: 500, damping: 30 }}
@@ -93,11 +102,11 @@ export function Header() {
             </li>
           ))}
         </ul>
-        <div className="flex space-x-4">
-          <Button className="bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-gray-900/90">
+        <div className="hidden md:flex space-x-4">
+          <Button className="bg-secondary text-secondary-foreground px-4 py-2 rounded-lg hover:bg-secondary/90">
             View Live Demo 🦆
           </Button>
-          <Button className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-500/90">
+          <Button className="bg-primary text-primary-foreground px-4 py-2 rounded-lg hover:bg-primary/90">
             Get Started
           </Button>
         </div>
