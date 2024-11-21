@@ -25,6 +25,7 @@ const itemVariants = {
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const CardContent = ({ title, description, buttonText, icon: Icon, href } : any) => (
   <motion.div
     variants={itemVariants}
@@ -33,7 +34,7 @@ const CardContent = ({ title, description, buttonText, icon: Icon, href } : any)
     className="bg-card/30 backdrop-blur-sm p-8 rounded-lg shadow-lg text-center border border-primary/10 hover:border-primary/30 transition-colors duration-300 flex flex-col h-full justify-between"
   >
     <div>
-      <Icon className="text-5xl mb-4 text-primary mx-auto" />
+    <Icon className="text-5xl mb-4 text-primary mx-auto" />
       <h2 className="text-3xl font-bold mb-4 text-primary">{title}</h2>
       <p className="text-lg mb-8 text-muted-foreground">{description}</p>
     </div>

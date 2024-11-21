@@ -10,12 +10,12 @@ import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { ThemeToggle } from '@/components/themeToggle/ThemeToggle';
 import { navItems } from '@/lib/navItems';
 
-type SideBarProps = {
-  logo?: string;
-  actions?: React.ReactNode;
-};
+// type SideBarProps = {
+//   logo?: string;
+//   actions?: React.ReactNode;
+// };
 
-export const SideBar = React.memo(function SideBar({ logo, actions }: SideBarProps) {
+export const SideBar = React.memo(function SideBar() {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const pathname = usePathname();

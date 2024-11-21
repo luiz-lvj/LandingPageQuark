@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { FaTwitter, FaTelegram, FaDiscord } from 'react-icons/fa'
+import { FaTwitter, } from 'react-icons/fa'
 import Image from 'next/image'
 
 const socialLinks = [
